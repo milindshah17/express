@@ -83,15 +83,51 @@ function createRouter(db) {
     );
   });
 
-
-
-  
-
-  router.post('/test', function(req, resp){
+  router.post('/addproduct', function (req, res) {
     var querypm = JSON.parse(JSON.stringify(req.body));
     var name= querypm.name;
+    var dist=querypm.district;
+    db.query(
+      "INSERT into test (name,descr)values ('"+name+"','"+name+"');  ",
+      
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json(results);
+        }
+      }
+    );
+  });
+
+  router.post('/signin', function (req, res) {
+    var querypm = JSON.parse(JSON.stringify(req.body));
+    var username= querypm.username;
+    var password=querypm.password;
+    db.query(
+      "select buyer_id from buyer where buyer_username='"+username+"' and buyer_password ='"+password+"';  ",
+      
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json(results);
+        }
+      }
+    );
+  });
+
+  
+  
+
+  router.post('/test', function(req, res){
+    var querypm = JSON.parse(JSON.stringify(req.body));
+    var name= querypm.name;
+    
     console.log(name);      // your JSON
-    resp.status(200).json(name);    // echo the result back
+    res.status(200).json(name);    // echo the result back
   });
 
   return router;
