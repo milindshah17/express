@@ -106,7 +106,52 @@ function createRouter(db) {
     var username= querypm.username;
     var password=querypm.password;
     db.query(
-      "select buyer_id from buyer where buyer_username='"+username+"' and buyer_password ='"+password+"';  ",
+      "select buyer_id,buyer_name from buyer where buyer_username='"+username+"' and buyer_password ='"+password+"';  ",
+      
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json(results);
+        }
+      }
+    );
+  });
+
+
+  router.post('/slsignin', function (req, res) {
+    var querypm = JSON.parse(JSON.stringify(req.body));
+    var username= querypm.username;
+    var password=querypm.password;
+    db.query(
+      "select seller_id,seller_name from seller where seller_username='"+username+"' and seller_password ='"+password+"';  ",
+      
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json(results);
+        }
+      }
+    );
+  });
+
+   router.post('/register', function (req, res) {
+    var querypm = JSON.parse(JSON.stringify(req.body));
+    var name= querypm.name;
+    var phone= querypm.phone;
+    var email= querypm.email;
+    var username= querypm.username;
+    var password= querypm.password;
+    var state= querypm.state;
+    var district= querypm.district;
+    var address= querypm.address;
+    var aadhar=querypm.aadhar;
+    console.log(querypm)
+    db.query(
+      "insert into buyer (buyer_username,buyer_name,buyer_phone,buyer_email,buyer_aadhar,buyer_address,buyer_district,buyer_state,buyer_password) values ('"+username+"','"+name+"','"+phone+"','"+email+"','"+aadhar+"','"+address+"','"+district+"','"+state+"','"+password+"') ",
       
       (error, results) => {
         if (error) {
