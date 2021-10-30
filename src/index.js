@@ -8,7 +8,8 @@ const connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : '',
-  database : 'auction_system'
+  database : 'auction system',
+  multipleStatements: true
 });
 
 connection.connect();

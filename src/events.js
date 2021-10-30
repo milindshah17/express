@@ -65,7 +65,7 @@ function createRouter(db) {
 
 
 
-  router.get('/products', function (req, res, next) {
+  /*router.get('/products', function (req, res, next) {
     var querypm = req.query;
     var cat= querypm.category;
     var dist=querypm.district;
@@ -81,7 +81,7 @@ function createRouter(db) {
         }
       }
     );
-  });
+  }); */
 
   router.post('/addproduct', function (req, res) {
     var querypm = JSON.parse(JSON.stringify(req.body));
@@ -164,7 +164,51 @@ function createRouter(db) {
     );
   });
 
+
+
+  router.post('/bid', function (req, res) {
+    var querypm = JSON.parse(JSON.stringify(req.body));
+    var product= parseInt(querypm.product_id);
+    var bid= parseInt(querypm.bidvalue);
+    var buyer=parseInt(querypm.buyer_id);
+
+    console.log(querypm);
+    console.log (product);
+    console.log(bid);
+    console.log(buyer);
   
+    
+    db.query(
+      "insert into bid (product_id,buyer_id,bid) values ("+product+","+buyer+","+bid+"); update product SET current_bid = "+bid+" , bid_id = LAST_INSERT_ID() WHERE product_id = "+product+";",
+         (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json(results);
+        }
+      }
+    );
+  });
+
+  
+
+  router.post('/slview', function (req, res) {
+    var querypm = JSON.parse(JSON.stringify(req.body));
+    var seller_id = parseInt(querypm.sid);
+    console.log (seller_id);
+     db.query(
+      "select * from product where Seller_id ="+seller_id+" " ,
+        (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({status: 'error'});
+        } else {
+          res.status(200).json(results);
+        }
+      }
+    );
+  });
   
 
   router.post('/test', function(req, res){
